@@ -39,6 +39,7 @@ def _wrap_help(x: _PrintHelp) -> CLIEntrypoint:
 def init_argparse() -> argparse.ArgumentParser:
     from ..device.provision_cli import cli_device_provision
     from ..mux.venv.venv_cli import cli_venv
+    from ..pluginhost.plugin_cli import cli_admin_run_plugin_cmd
     from ..ruyipkg.admin_cli import cli_admin_format_manifest, cli_admin_manifest
     from ..ruyipkg.host import get_native_host
     from ..ruyipkg.news_cli import cli_news_list, cli_news_read
@@ -296,6 +297,28 @@ def init_argparse() -> argparse.ArgumentParser:
         help="Path to the distfile(s) to generate manifest for",
     )
     admin_manifest.set_defaults(func=cli_admin_manifest, tele_key="admin manifest")
+
+    admin_run_plugin_cmd = adminsp.add_parser(
+        "run-plugin-cmd",
+        help="Run a plugin-defined command",
+    )
+    admin_run_plugin_cmd.add_argument(
+        "cmd_name",
+        type=str,
+        metavar="COMMAND-NAME",
+        help="Command name",
+    )
+    admin_run_plugin_cmd.add_argument(
+        "cmd_args",
+        type=str,
+        nargs="*",
+        metavar="COMMAND-ARG",
+        help="Arguments to pass to the plugin command",
+    )
+    admin_run_plugin_cmd.set_defaults(
+        func=cli_admin_run_plugin_cmd,
+        tele_key="admin run-plugin-cmd",
+    )
 
     # Self-management commands
     self = sp.add_parser(
