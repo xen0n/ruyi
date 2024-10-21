@@ -1,3 +1,20 @@
+diff --git a/nuitka/build/SconsCompilerSettings.py b/nuitka/build/SconsCompilerSettings.py
+index 090709512..ad8666f01 100644
+--- a/nuitka/build/SconsCompilerSettings.py
++++ b/nuitka/build/SconsCompilerSettings.py
+@@ -383,9 +383,9 @@ For Python version %s MSVC %s or later is required, not %s which is too old."""
+                         % (compiler_path,)
+                     )
+ 
+-                # This also will trigger using it to use our own gcc in branch below.
+-                compiler_path = None
+-                env["CC"] = None
++                    # This also will trigger using it to use our own gcc in branch below.
++                    compiler_path = None
++                    env["CC"] = None
+ 
+         if compiler_path is None and msvc_version is None:
+             scons_details_logger.info(
 diff --git a/nuitka/build/include/nuitka/helpers.h b/nuitka/build/include/nuitka/helpers.h
 index ac1cd65a8..b57a0ed63 100644
 --- a/nuitka/build/include/nuitka/helpers.h
@@ -16,7 +33,7 @@ index ac1cd65a8..b57a0ed63 100644
  extern void setEarlyFrozenModulesFileAttribute(PyThreadState *tstate);
  #endif
 diff --git a/nuitka/build/include/nuitka/prelude.h b/nuitka/build/include/nuitka/prelude.h
-index 07ca171da..fde0a636d 100644
+index 07ca171da..5392d2441 100644
 --- a/nuitka/build/include/nuitka/prelude.h
 +++ b/nuitka/build/include/nuitka/prelude.h
 @@ -276,6 +276,7 @@ NUITKA_MAY_BE_UNUSED static inline managed_static_type_state *Nuitka_PyStaticTyp
@@ -59,7 +76,7 @@ index 07ca171da..fde0a636d 100644
 -
 -#if PYTHON_VERSION < 0x300
 -#define PyUnicode_GET_LENGTH(x) (PyUnicode_GET_SIZE(x))
-+#define Nuitka_UnicodeAsWideString(str) PyUnicode_AsWideCharString(str, NULL)
++#define Nuitka_UnicodeAsWideString PyUnicode_AsWideCharString
  #endif
  
  // Wrap the type lookup for debug mode, to identify errors, and potentially
@@ -119,7 +136,7 @@ index a49057be2..7272d8588 100644
  
      // Make sure the compiled path of Python is replaced.
 diff --git a/nuitka/build/static_src/MetaPathBasedLoader.c b/nuitka/build/static_src/MetaPathBasedLoader.c
-index c46ea157e..a457a132b 100644
+index c46ea157e..885d706c0 100644
 --- a/nuitka/build/static_src/MetaPathBasedLoader.c
 +++ b/nuitka/build/static_src/MetaPathBasedLoader.c
 @@ -95,10 +95,12 @@ static char *appendModuleNameAsPath(char *buffer, char const *module_name, size_
@@ -146,7 +163,7 @@ index c46ea157e..a457a132b 100644
 -#else
 -    wchar_t const *extension_module_filename_str = PyUnicode_AsWideCharString(extension_module_filename, NULL);
 -#endif
-+    wchar_t const *extension_module_filename_str = Nuitka_UnicodeAsWideString(extension_module_filename);
++    wchar_t const *extension_module_filename_str = Nuitka_UnicodeAsWideString(extension_module_filename, NULL);
  #else
      char const *extension_module_filename_str = Nuitka_String_AsString(extension_module_filename);
  #endif
