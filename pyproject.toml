@@ -168,3 +168,7 @@ ignore = [
   "UP035",  # collections.abc instead of typing
   "UP040",  # type = instead of TypeAlias (Python 3.12+)
 ]
+
+[tool.ruff.lint.per-file-ignores]
+# side-effect-only imports
+"ruyi/cli/builtin_commands.py" = ["F401"]
