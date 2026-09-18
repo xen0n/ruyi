@@ -75,7 +75,7 @@ exclude = ["**/.gitignore"]
 mypy = "^2"
 pyright = "^1.1.389"
 pytest = ">=6.2.5"
-ruff = "^0.15"
+ruff = "^0.16"
 tomlkit-extras = "^0.2.0"
 typing-extensions = ">=4.4.0"
 
