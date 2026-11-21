@@ -48,11 +48,11 @@ class PluginLoadMode(enum.Enum):
         return self is PluginLoadMode.COMMAND_PLUGIN
 
 
-ModuleTy = TypeVar("ModuleTy", bound=SupportsGetOption, covariant=True)
-EvalTy = TypeVar("EvalTy", bound=SupportsEvalFunction, covariant=True)
+ModuleTy_co = TypeVar("ModuleTy_co", bound=SupportsGetOption, covariant=True)
+EvalTy_co = TypeVar("EvalTy_co", bound=SupportsEvalFunction, covariant=True)
 
 
-class PluginHostContext(Generic[ModuleTy, EvalTy], metaclass=abc.ABCMeta):
+class PluginHostContext(Generic[ModuleTy_co, EvalTy_co], metaclass=abc.ABCMeta):
     @staticmethod
     def new(
         host_logger: RuyiLogger,
@@ -90,7 +90,7 @@ class PluginHostContext(Generic[ModuleTy, EvalTy], metaclass=abc.ABCMeta):
         self._host_logger = host_logger
         self._plugin_root = plugin_root
         # resolved path: finalized module
-        self._module_cache: MutableMapping[str, ModuleTy] = {}
+        self._module_cache: MutableMapping[str, ModuleTy_co] = {}
         # plugin id: finalized plugin module
         self._loaded_plugins: dict[str, SupportsGetOption] = {}
         # plugin id: {key: value}
@@ -118,13 +118,13 @@ class PluginHostContext(Generic[ModuleTy, EvalTy], metaclass=abc.ABCMeta):
     def make_loader(
         self,
         originating_file: pathlib.Path,
-        module_cache: MutableMapping[str, ModuleTy],
+        module_cache: MutableMapping[str, ModuleTy_co],
         load_mode: PluginLoadMode,
-    ) -> "BasePluginLoader[ModuleTy]":
+    ) -> "BasePluginLoader[ModuleTy_co]":
         raise NotImplementedError
 
     @abc.abstractmethod
-    def make_evaluator(self) -> EvalTy:
+    def make_evaluator(self) -> EvalTy_co:
         raise NotImplementedError
 
     @property
@@ -226,7 +226,7 @@ class PluginHostContext(Generic[ModuleTy, EvalTy], metaclass=abc.ABCMeta):
         return self._msg_store_factory()
 
 
-class BasePluginLoader(Generic[ModuleTy], metaclass=abc.ABCMeta):
+class BasePluginLoader(Generic[ModuleTy_co], metaclass=abc.ABCMeta):
     """Base class for plugin loaders loading from Ruyi repo.
 
     Load paths take one of the following shapes:
@@ -241,9 +241,9 @@ class BasePluginLoader(Generic[ModuleTy], metaclass=abc.ABCMeta):
 
     def __init__(
         self,
-        phctx: PluginHostContext[ModuleTy, SupportsEvalFunction],
+        phctx: PluginHostContext[ModuleTy_co, SupportsEvalFunction],
         originating_file: pathlib.Path,
-        module_cache: MutableMapping[str, ModuleTy],
+        module_cache: MutableMapping[str, ModuleTy_co],
         load_mode: PluginLoadMode,
     ) -> None:
         self._phctx = phctx
@@ -267,13 +267,13 @@ class BasePluginLoader(Generic[ModuleTy], metaclass=abc.ABCMeta):
             self.load_mode,
         )
 
-    def load_this_plugin(self) -> ModuleTy:
+    def load_this_plugin(self) -> ModuleTy_co:
         return self._load(str(self.originating_file), True)
 
-    def load(self, path: str) -> ModuleTy:
+    def load(self, path: str) -> ModuleTy_co:
         return self._load(path, False)
 
-    def _load(self, path: str, is_root: bool) -> ModuleTy:
+    def _load(self, path: str, is_root: bool) -> ModuleTy_co:
         resolved_path: pathlib.Path
         if is_root:
             resolved_path = pathlib.Path(path)
@@ -323,7 +323,7 @@ class BasePluginLoader(Generic[ModuleTy], metaclass=abc.ABCMeta):
         resolved_path: pathlib.Path,
         program: str,
         ruyi_host_bridge: Callable[[object], api.RuyiHostAPI],
-    ) -> ModuleTy:
+    ) -> ModuleTy_co:
         raise NotImplementedError
 
 
