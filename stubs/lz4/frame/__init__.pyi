@@ -3,7 +3,7 @@ import io
 import os
 import types
 from _typeshed import ReadableBuffer
-from typing import IO, Literal, Protocol, overload
+from typing import IO, Literal, Protocol, Self, overload
 
 from ._frame import (
     BLOCKSIZE_DEFAULT as BLOCKSIZE_DEFAULT,
@@ -49,7 +49,7 @@ class LZ4FrameCompressor:
         auto_flush: bool = False,
         return_bytearray: bool = False,
     ) -> None: ...
-    def __enter__(self) -> LZ4FrameCompressor: ...
+    def __enter__(self) -> Self: ...
     def __exit__(
         self,
         exception_type: type[BaseException] | None,
@@ -69,7 +69,7 @@ class LZ4FrameDecompressor:
     unused_data: bytes | None
 
     def __init__(self, return_bytearray: bool = False) -> None: ...
-    def __enter__(self) -> LZ4FrameDecompressor: ...
+    def __enter__(self) -> Self: ...
     def __exit__(
         self,
         exception_type: type[BaseException] | None,

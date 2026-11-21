@@ -1,5 +1,5 @@
 from contextlib import AbstractContextManager
-from typing import BinaryIO, TYPE_CHECKING
+from typing import BinaryIO, Self, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from types import TracebackType
@@ -18,7 +18,7 @@ class ArpyArchiveWrapper(arpy.Archive, AbstractContextManager["arpy.Archive"]):
     ) -> None:
         super().__init__(filename=filename, fileobj=fileobj)
 
-    def __enter__(self) -> arpy.Archive:
+    def __enter__(self) -> Self:
         if hasattr(super(), "__enter__"):
             # in case we're working with a newer arpy version that has a
             # non-trivial __enter__ implementation
