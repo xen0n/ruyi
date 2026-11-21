@@ -1,6 +1,9 @@
 from contextlib import AbstractContextManager
 import pathlib
-from typing import Any, Self
+from typing import Self, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from types import TracebackType
 
 from pygit2 import GitError, Oid
 from pygit2.callbacks import RemoteCallbacks
@@ -55,7 +58,12 @@ class RemoteGitProgressIndicator(
         self.p.__enter__()
         return self
 
-    def __exit__(self, exc_type: Any, exc_value: Any, tb: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        tb: "TracebackType | None",
+    ) -> None:
         return self.p.__exit__(exc_type, exc_value, tb)
 
     # Compatibility with pygit2 < 1.8.0.

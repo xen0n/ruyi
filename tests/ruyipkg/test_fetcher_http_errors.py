@@ -8,8 +8,12 @@ treat non-2xx responses as fetch failures and never keep whatever the
 server sent in that case.
 """
 
+from contextlib import AbstractContextManager
 import os
-from typing import Any, cast
+from typing import Any, Self, cast, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from types import TracebackType
 
 import pytest
 import requests
@@ -73,7 +77,7 @@ def _patch_subprocess(
     return fake
 
 
-class _FakeResponse:
+class _FakeResponse(AbstractContextManager["_FakeResponse"]):
     def __init__(
         self,
         status_code: int,
@@ -96,10 +100,15 @@ class _FakeResponse:
     def close(self) -> None:
         self.closed = True
 
-    def __enter__(self) -> "_FakeResponse":
+    def __enter__(self) -> Self:
         return self
 
-    def __exit__(self, *args: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        tb: "TracebackType | None",
+    ) -> None:
         return None
 
 

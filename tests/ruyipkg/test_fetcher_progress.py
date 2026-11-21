@@ -1,8 +1,12 @@
 """Tests for porcelain download progress reporting."""
 
+from contextlib import AbstractContextManager
 import json
 import os
-from typing import Any
+from typing import Any, Self, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from types import TracebackType
 
 import pytest
 import requests
@@ -56,22 +60,27 @@ class _RaisingResponse(_ChunkedResponse):
         )
 
 
-class _FakeProgress:
+class _FakeProgress(AbstractContextManager["_FakeProgress"]):
     instances = 0
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
+    def __init__(self, *args: object, **kwargs: object) -> None:
         type(self).instances += 1
 
-    def __enter__(self) -> "_FakeProgress":
+    def __enter__(self) -> Self:
         return self
 
-    def __exit__(self, *args: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        tb: "TracebackType | None",
+    ) -> None:
         return None
 
-    def add_task(self, *args: Any, **kwargs: Any) -> int:
+    def add_task(self, *args: object, **kwargs: object) -> int:
         return 0
 
-    def advance(self, *args: Any, **kwargs: Any) -> None:
+    def advance(self, *args: object, **kwargs: object) -> None:
         pass
 
 
