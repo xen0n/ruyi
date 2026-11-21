@@ -8,7 +8,7 @@ from .pkg_manifest import BoundPackageManifest, is_prerelease
 from .protocols import ProvidesPackageManifests
 
 
-AtomKind = Literal["name"] | Literal["expr"] | Literal["slug"]
+AtomKind = Literal["name", "expr", "slug"]
 
 RE_ATOM_EXPR: Final = re.compile(r"^([^:(]+)\((.+)\)$")
 RE_ATOM_NAME: Final = re.compile(r"^[^:()]+$")

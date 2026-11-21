@@ -1,6 +1,6 @@
 from typing import Literal, TypeAlias, TypeGuard
 
-TelemetryScopeConfig: TypeAlias = Literal["pm"] | Literal["repo"]
+TelemetryScopeConfig: TypeAlias = Literal["pm", "repo"]
 
 
 def is_telemetry_scope_config(x: object) -> TypeGuard[TelemetryScopeConfig]:

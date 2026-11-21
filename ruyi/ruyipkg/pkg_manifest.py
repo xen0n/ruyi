@@ -54,7 +54,7 @@ class VendorDeclType(TypedDict):
     data: "NotRequired[dict[str, VendorDataDeclType]]"
 
 
-RestrictKind = Literal["fetch"] | Literal["mirror"]
+RestrictKind = Literal["fetch", "mirror"]
 
 
 class FetchRestrictionDeclType(TypedDict):
@@ -127,17 +127,25 @@ class EmulatorDeclType(TypedDict):
     programs: list[EmulatorProgramDeclType]
 
 
-PartitionKind = (
-    Literal["boot"]
-    | Literal["disk"]
-    | Literal["live"]
-    | Literal["root"]
-    | Literal["uboot"]
-)
+PartitionKind = Literal[
+    "boot",
+    "disk",
+    "live",
+    "root",
+    "uboot",
+]
 
 # error: "<typing special form>" has no attribute "__args__"
 # KNOWN_PARTITION_KINDS = frozenset(kind.__args__[0] for kind in PartitionKind.__args__)
-KNOWN_PARTITION_KINDS: Final = frozenset(("boot", "disk", "live", "root", "uboot"))
+KNOWN_PARTITION_KINDS: Final = frozenset(
+    (
+        "boot",
+        "disk",
+        "live",
+        "root",
+        "uboot",
+    )
+)
 
 PartitionMapDecl = dict[PartitionKind, str]
 
@@ -147,14 +155,14 @@ class ProvisionableDeclType(TypedDict):
     strategy: str
 
 
-PackageKind = (
-    Literal["binary"]
-    | Literal["blob"]
-    | Literal["source"]
-    | Literal["toolchain"]
-    | Literal["emulator"]
-    | Literal["provisionable"]
-)
+PackageKind = Literal[
+    "binary",
+    "blob",
+    "source",
+    "toolchain",
+    "emulator",
+    "provisionable",
+]
 
 ALL_PACKAGE_KINDS: Final[list[PackageKind]] = [
     "binary",
@@ -167,7 +175,7 @@ ALL_PACKAGE_KINDS: Final[list[PackageKind]] = [
 
 RuyiPkgFormat = Literal["v1"]
 
-ServiceLevelKind = Literal["good"] | Literal["known_issue"] | Literal["untested"]
+ServiceLevelKind = Literal["good", "known_issue", "untested"]
 
 ALL_SERVICE_LEVEL_KINDS: Final[list[ServiceLevelKind]] = [
     "good",
