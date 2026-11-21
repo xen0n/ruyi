@@ -31,12 +31,31 @@ class UnpackMethod(enum.StrEnum):
 
 
 class UnrecognizedPackFormatError(Exception):
-    def __init__(self, *, filename: str) -> None:
+    def __init__(
+        self,
+        *,
+        filename: str | None = None,
+        fmt: UnpackMethod | None = None,
+    ) -> None:
+        if filename is None and fmt is None:
+            raise ValueError("either filename or format must be provided")
         self.filename = filename
+        self.fmt = fmt
 
     def __str__(self) -> str:
-        return _("don't know how to unpack file {filename}").format(
-            filename=self.filename,
+        if self.filename is not None:
+            if self.fmt is not None:
+                return _(
+                    "don't know how to unpack file '{filename}' using format '{fmt}'"
+                ).format(
+                    filename=self.filename,
+                    fmt=self.fmt,
+                )
+            return _("don't know how to unpack file '{filename}'").format(
+                filename=self.filename,
+            )
+        return _("don't know how to unpack format '{fmt}'").format(
+            fmt=self.fmt,
         )
 
 
