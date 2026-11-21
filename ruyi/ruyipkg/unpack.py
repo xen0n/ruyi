@@ -241,9 +241,7 @@ def open_decompressed(
             finally:
                 lz4File.close()
         case _:
-            raise ValueError(
-                f"do_unpack_tar cannot handle non-tar unpack method {unpack_method}"
-            )
+            raise UnrecognizedPackFormatError(filename=filename, fmt=unpack_method)
 
 
 @contextmanager
@@ -292,9 +290,7 @@ def _wrap_decompressed(
             finally:
                 lz4File.close()
         case _:
-            raise ValueError(
-                f"do_unpack_tar cannot handle non-tar unpack method {unpack_method}"
-            )
+            raise UnrecognizedPackFormatError(fmt=unpack_method)
 
 
 def _do_unpack_zip(
