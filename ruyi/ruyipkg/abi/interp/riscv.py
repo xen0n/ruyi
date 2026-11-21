@@ -1,7 +1,5 @@
 """RISC-V ABI attribute interpreter."""
 
-from __future__ import annotations
-
 import re
 import struct
 from typing import Mapping, Sequence

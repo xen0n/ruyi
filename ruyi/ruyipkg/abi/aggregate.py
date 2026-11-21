@@ -1,7 +1,5 @@
 """Aggregate per-ELF records into a package-level ABI summary."""
 
-from __future__ import annotations
-
 from typing import Sequence
 
 from .model import ABISummary, ElfABIRecord, VersionNeed

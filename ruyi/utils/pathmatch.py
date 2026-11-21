@@ -4,8 +4,6 @@ Named `pathmatch` (not `pathspec`) to avoid shadowing the third-party
 `pathspec` package it wraps.
 """
 
-from __future__ import annotations
-
 from typing import Sequence
 
 

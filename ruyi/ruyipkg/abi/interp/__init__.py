@@ -3,8 +3,6 @@
 Importing this package registers all bundled interpreters as a side effect.
 """
 
-from __future__ import annotations
-
 from .base import (
     ArchMetadata,
     AttrInterpreter,

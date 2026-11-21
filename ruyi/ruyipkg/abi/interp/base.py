@@ -5,8 +5,6 @@ AttributeVendorBlob structures and emit a flat key-value map. A machine with no
 registered interpreter still gets full raw capture, just no decoded keys.
 """
 
-from __future__ import annotations
-
 import platform
 import sys
 from typing import Mapping, NamedTuple, Protocol, Sequence, runtime_checkable

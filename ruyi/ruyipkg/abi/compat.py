@@ -4,8 +4,6 @@ No I/O happens here: HostABIReport contains every fact the rules need.
 Each rule yields one HostABICompatItem ready for rendering.
 """
 
-from __future__ import annotations
-
 from collections.abc import Mapping
 from dataclasses import dataclass
 

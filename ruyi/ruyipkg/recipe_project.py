@@ -9,13 +9,10 @@ root given a recipe file, parsing the marker, and a realpath-based join
 helper used by loaders and the build runner.
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 import pathlib
 import tomllib
 from typing import Any
-
 
 MARKER_FILENAME = "ruyi-build-recipes.toml"
 SUPPORTED_FORMATS = frozenset({"v1"})

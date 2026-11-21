@@ -10,8 +10,6 @@ callable is invoked with a :class:`RecipeBuildCtx` that returns plans
 (:class:`Invocation`, :class:`Artifact`) rather than executing anything.
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Mapping, NamedTuple
 import pathlib

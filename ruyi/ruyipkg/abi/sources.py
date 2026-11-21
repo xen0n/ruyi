@@ -1,11 +1,9 @@
 """Source abstraction yielding ELF-candidate members from dirs or archives."""
 
-from __future__ import annotations
-
 import abc
 import functools
 import pathlib
-from typing import BinaryIO, Callable, cast, Iterable, Iterator, TYPE_CHECKING
+from typing import BinaryIO, Callable, Iterable, Iterator, cast, TYPE_CHECKING
 
 from ..unpack_method import UnpackMethod, determine_unpack_method
 
@@ -32,7 +30,7 @@ _TAR_METHODS = frozenset(
 
 
 def _path_reader(path: pathlib.Path) -> Callable[[], bytes]:
-    return lambda: path.read_bytes()
+    return path.read_bytes
 
 
 def _bytes_reader(data: bytes) -> Callable[[], bytes]:
@@ -66,7 +64,7 @@ class ABISource(abc.ABC):
         return _ArchiveSource(pathlib.Path(path), unpack_method, strip_components)
 
     @staticmethod
-    def from_paths(paths: Iterable[pathlib.Path | str]) -> ABISource:
+    def from_paths(paths: Iterable[pathlib.Path | str]) -> "ABISource":
         return _PathsSource(paths)
 
 
@@ -130,7 +128,7 @@ class _ArchiveSource(ABISource):
             # the iteration. Member contents are pulled lazily by the consumer,
             # so excluded or oversized members are never materialized.
             with open_decompressed(str(self._path), self._method) as stream:
-                fileobj = cast("BinaryIO", stream)
+                fileobj = cast(BinaryIO, stream)
                 with tarfile.open(fileobj=fileobj, mode="r|") as tf:
                     yield from self._iter_tar_members(tf)
         else:

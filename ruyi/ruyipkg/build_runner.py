@@ -19,8 +19,6 @@ at the module top level so that the CLI startup-flow lint stays happy;
 all subprocess/hashlib/tomllib usage is inside :func:`run_recipe`.
 """
 
-from __future__ import annotations
-
 from dataclasses import dataclass
 import pathlib
 from typing import TYPE_CHECKING, Any, Iterable, Mapping, Sequence

@@ -4,8 +4,6 @@ Every function swallows I/O and OS errors and returns an empty value:
 probing must degrade, never raise.
 """
 
-from __future__ import annotations
-
 
 def read_cpuinfo(path: str = "/proc/cpuinfo") -> str:
     try:

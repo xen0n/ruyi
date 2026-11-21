@@ -4,8 +4,6 @@ These functions operate purely on raw bytes and never import pyelftools'
 architecture-aware decoders, so they behave identically for every machine.
 """
 
-from __future__ import annotations
-
 import struct
 
 from .model import AttributeVendorBlob, GnuProperty

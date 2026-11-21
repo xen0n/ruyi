@@ -4,8 +4,6 @@ Shared by ``ruyi admin rescan-package-abi`` and the ``build-package``
 executor. Heavy imports stay inside functions to keep CLI startup light.
 """
 
-from __future__ import annotations
-
 import pathlib
 from typing import TYPE_CHECKING, Sequence
 

@@ -6,8 +6,6 @@ duration of one probe and never persisted to disk, so users may freely update
 their systems without anything our side becoming stale.
 """
 
-from __future__ import annotations
-
 import pathlib
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass

@@ -1,7 +1,5 @@
 """AArch64 ABI attribute interpreter."""
 
-from __future__ import annotations
-
 from typing import Literal, Mapping, Sequence
 
 from ..model import AttributeVendorBlob, GnuProperty

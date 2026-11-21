@@ -1,7 +1,5 @@
 """Deterministic canonical TOML serialization of an ABI report."""
 
-from __future__ import annotations
-
 from typing import Any, Mapping
 
 import tomlkit

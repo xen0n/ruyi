@@ -9,8 +9,6 @@ ruyi's own Nuitka-bundled libraries (onefile progcache) are unusable by
 installed packages and must stay invisible here.
 """
 
-from __future__ import annotations
-
 from collections.abc import Sequence
 import pathlib
 import struct

@@ -5,8 +5,6 @@ This module owns the user-facing status vocabulary, the porcelain shape, and
 the sidecar/probe session shared by `ruyi list` and `ruyi install`.
 """
 
-from __future__ import annotations
-
 import enum
 import pathlib
 from typing import Mapping, NamedTuple, Sequence, TypedDict, cast

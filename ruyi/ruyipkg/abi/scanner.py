@@ -1,7 +1,5 @@
 """Per-ELF fact extraction, combining raw capture and interpretation."""
 
-from __future__ import annotations
-
 import dataclasses
 import hashlib
 import io
