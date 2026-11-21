@@ -67,7 +67,7 @@ def _match_lang_code_slowpath(
             return fallback_en["US"]
         if None in fallback_en:
             return fallback_en[None]
-        return fallback_en[sorted(x for x in fallback_en.keys() if x is not None)[0]]
+        return fallback_en[sorted(x for x in fallback_en if x is not None)[0]]
 
     fallback_zh = {x.region: x.raw for x in avail if x.lang == "zh"}
     if fallback_zh:
@@ -75,7 +75,7 @@ def _match_lang_code_slowpath(
             return fallback_zh["CN"]
         if None in fallback_zh:
             return fallback_zh[None]
-        return fallback_zh[sorted(x for x in fallback_zh.keys() if x is not None)[0]]
+        return fallback_zh[sorted(x for x in fallback_zh if x is not None)[0]]
 
     # neither en nor zh is available (which is highly unlikely at present)
     # pick the first available one as a last resort

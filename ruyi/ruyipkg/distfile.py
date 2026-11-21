@@ -89,7 +89,7 @@ class Distfile:
             "dest_path": self.dest,
         }
         if "params" in fr:
-            for k in params.keys():
+            for k in params:
                 # Don't allow package-defined params to override preset params,
                 # to reduce surprises for packagers.
                 if k in fr["params"]:
