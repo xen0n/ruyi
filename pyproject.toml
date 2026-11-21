@@ -167,6 +167,13 @@ norecursedirs = ["ruyi-pytest"]
 
 [tool.ruff]
 extend-exclude = [
+  # explicitly legacy config format
+  # due to https://github.com/astral-sh/ruff/issues/24305, this cannot be done
+  # via per-file-ignores
+  #
+  # "contrib/poetry-1.x/pyproject.toml": ["RUF200"],
+  "contrib/poetry-1.x",
+  # maintained separately
   "tests/ruyi-pytest",
 ]
 
