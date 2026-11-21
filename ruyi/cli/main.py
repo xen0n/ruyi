@@ -14,6 +14,9 @@ from ..version import RUYI_SEMVER
 from . import RUYI_ENTRYPOINT_NAME
 from .oobe import OOBE
 
+if TYPE_CHECKING:
+    from .cmd import CLIEntrypoint
+
 ALLOWED_RUYI_ENTRYPOINT_NAMES: Final = (
     RUYI_ENTRYPOINT_NAME,
     f"{RUYI_ENTRYPOINT_NAME}.exe",
@@ -119,9 +122,6 @@ def main(gm: GlobalModeProvider, gc: GlobalConfig, argv: list[str]) -> int:
 
     del builtin_commands
 
-    if TYPE_CHECKING:
-        from .cmd import CLIEntrypoint
-
     p = RootCommand.build_argparse(gc)
 
     # We have to ensure argcomplete is only requested when it's supposed to,
@@ -158,7 +158,7 @@ def main(gm: GlobalModeProvider, gc: GlobalConfig, argv: list[str]) -> int:
     logger.D(f"argv[0] = {gm.argv0}, self_exe = {gm.self_exe}")
     logger.D(f"args={args}")
 
-    func: "CLIEntrypoint" = args.func
+    func: CLIEntrypoint = args.func
 
     # record every invocation's subcommand for better insight into usage
     # frequencies
