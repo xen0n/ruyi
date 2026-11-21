@@ -112,7 +112,7 @@ class PluginHostContext(Generic[ModuleTy, EvalTy], metaclass=abc.ABCMeta):
 
         # Scheduled builds, populated by RUYI.build.schedule_build during
         # load of a build-recipe module. Keyed by recipe file path.
-        self._scheduled_builds: dict[pathlib.Path, list["ScheduledBuild"]] = {}
+        self._scheduled_builds: dict[pathlib.Path, list[ScheduledBuild]] = {}
 
     @abc.abstractmethod
     def make_loader(

@@ -37,8 +37,7 @@ def do_provision_interactive(config: GlobalConfig) -> int:
     mr.ensure_git_repo()
 
     log.stdout(
-        _(
-            """
+        _("""
 [bold green]RuyiSDK Device Provisioning Wizard[/]
 
 This is a wizard intended to help you install a system on your device for your
@@ -53,8 +52,7 @@ Note that, as Ruyi does not run as [yellow]root[/], but raw disk access is most 
 required to flash images, you should arrange to allow your user account [yellow]sudo[/]
 access to necessary commands such as [yellow]dd[/]. Flashing will fail if the [yellow]sudo[/]
 configuration does not allow so.
-"""
-        )
+""")
     )
 
     if not user_input.ask_for_yesno_confirmation(log, _("Continue?")):
@@ -216,16 +214,14 @@ def do_provision_combo_interactive(
     host_blkdev_map: PartitionMapDecl = {}
     if requested_host_blkdevs:
         logger.stdout(
-            _(
-                """
+            _("""
 For initializing this target device, you should plug into this host system the
 device's storage (e.g. SD card or NVMe SSD), or a removable disk to be
 reformatted as a live medium, and note down the corresponding device file
 path(s), e.g. /dev/sdX, /dev/nvmeXnY for whole disks; /dev/sdXY, /dev/nvmeXnYpZ
 for partitions. You may consult e.g. [yellow]sudo blkid[/] output for the
 information you will need later.
-"""
-            )
+""")
         )
         for part in requested_host_blkdevs:
             part_desc = get_part_desc(part)
@@ -267,14 +263,12 @@ information you will need later.
 
     # final confirmation
     logger.stdout(
-        _(
-            """
+        _("""
 We have collected enough information for the actual flashing. Now is the last
 chance to re-check and confirm everything is fine.
 
 We are about to:
-"""
-        )
+""")
     )
 
     pretend_steps = "\n".join(
@@ -573,7 +567,7 @@ def customize_package_versions(
             category = a.category
             pkg_fullname = f"{category}/{package_name}" if category else package_name
 
-            available_versions: "list[BoundPackageManifest]" = []
+            available_versions: list[BoundPackageManifest] = []
             try:
                 available_versions = list(mr.iter_pkg_vers(package_name, category))
             except KeyError:

@@ -190,7 +190,7 @@ class GlobalConfig:
 
         self.is_default_repo_active = True
         self.repo_priority = 0
-        self._extra_repo_entries: list["RepoEntry"] = []
+        self._extra_repo_entries: list[RepoEntry] = []
 
     @property
     def logger(self) -> "RuyiLogger":
