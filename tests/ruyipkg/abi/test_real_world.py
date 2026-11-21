@@ -8,8 +8,6 @@ the scanner streams archive members without extracting them, so the tests stay
 fast.
 """
 
-from __future__ import annotations
-
 import pytest
 
 from ruyi.log import RuyiLogger

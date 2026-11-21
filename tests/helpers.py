@@ -1,7 +1,5 @@
 """Shared test-environment helpers."""
 
-from __future__ import annotations
-
 import pathlib
 import platform
 import sys

@@ -1,7 +1,5 @@
 """Minimal deterministic 64-bit ELF writer for scanner tests."""
 
-from __future__ import annotations
-
 import struct
 from typing import Mapping
 

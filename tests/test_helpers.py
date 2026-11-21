@@ -1,7 +1,5 @@
 """Tests for the shared test-environment helpers."""
 
-from __future__ import annotations
-
 import builtins
 import platform
 

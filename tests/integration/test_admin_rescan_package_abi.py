@@ -1,7 +1,5 @@
 """CLI integration tests for `ruyi admin rescan-package-abi`."""
 
-from __future__ import annotations
-
 import pathlib
 import shutil
 import tarfile

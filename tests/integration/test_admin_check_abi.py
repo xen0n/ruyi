@@ -1,7 +1,5 @@
 """CLI integration tests for `ruyi admin check-abi`."""
 
-from __future__ import annotations
-
 import pathlib
 import shutil
 

@@ -1,7 +1,5 @@
 """CLI integration tests for `ruyi admin build-package` (B8)."""
 
-from __future__ import annotations
-
 import pathlib
 
 from tests.fixtures import IntegrationTestHarness

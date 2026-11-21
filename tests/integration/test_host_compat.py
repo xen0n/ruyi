@@ -1,7 +1,5 @@
 """Integration tests for host compatibility in list and install."""
 
-from __future__ import annotations
-
 import json
 from typing import Any, cast
 

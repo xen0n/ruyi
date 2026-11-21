@@ -1,7 +1,5 @@
 """Tests for host-vs-package ABI compatibility checking (ruyi.ruyipkg.abi.compat)."""
 
-from __future__ import annotations
-
 from ruyi.ruyipkg.abi.aggregate import build_summary
 from ruyi.ruyipkg.abi.compat import (
     HostABICompatItem,
