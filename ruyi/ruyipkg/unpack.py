@@ -77,7 +77,7 @@ def do_unpack(
             # bare zstd file
             return _do_unpack_bare_zstd(logger, filename, dest)
         case _:
-            raise UnrecognizedPackFormatError(filename)
+            raise UnrecognizedPackFormatError(filename=filename)
 
 
 def do_unpack_or_symlink(

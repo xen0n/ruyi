@@ -31,7 +31,7 @@ class UnpackMethod(enum.StrEnum):
 
 
 class UnrecognizedPackFormatError(Exception):
-    def __init__(self, filename: str) -> None:
+    def __init__(self, *, filename: str) -> None:
         self.filename = filename
 
     def __str__(self) -> str:
