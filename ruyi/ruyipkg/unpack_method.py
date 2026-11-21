@@ -29,6 +29,26 @@ class UnpackMethod(enum.StrEnum):
     ZIP = "zip"
     DEB = "deb"
 
+    @property
+    def underlying_stream_format(self) -> "UnpackMethod":
+        S = type(self)
+        match self:
+            case S.RAW | S.TAR | S.TAR_AUTO:
+                return S.RAW
+            case S.GZ | S.TAR_GZ:
+                return S.GZ
+            case S.BZ2 | S.TAR_BZ2:
+                return S.BZ2
+            case S.LZ4 | S.TAR_LZ4:
+                return S.LZ4
+            case S.XZ | S.TAR_XZ:
+                return S.XZ
+            case S.ZST | S.TAR_ZST:
+                return S.ZST
+            case _:
+                # either truly unknown, or not single-stream
+                return S.UNKNOWN
+
 
 class UnrecognizedPackFormatError(Exception):
     def __init__(
