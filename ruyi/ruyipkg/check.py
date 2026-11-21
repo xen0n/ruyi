@@ -394,6 +394,8 @@ def _check_manifest_format(
 
 
 def _touch_manifest_parse_surface(manifest: PackageManifest) -> None:
+    # the no-op accesses are explicitly for their KeyError side effect
+    # ruff: disable[B018]
     manifest.to_raw()
     manifest.raw_doc
     manifest.slug
@@ -468,6 +470,8 @@ def _touch_manifest_parse_surface(manifest: PackageManifest) -> None:
     if provisionable_metadata := manifest.provisionable_metadata:
         provisionable_metadata.partition_map
         provisionable_metadata.strategy
+
+    # ruff: enable[B018]
 
 
 def _find_manifest_root(repo_root: pathlib.Path) -> pathlib.Path | None:
