@@ -181,6 +181,7 @@ extend-exclude = [
 ignore = [
   "BLE001",  # catch-alls are needed sometimes
   "FURB166",  # explicit prefix check AND not doing int(base=0) are clearer
+  "RUF020",  # `NoReturn | T` conveys control flow semantics concisely
   "SIM102",  # merging walrus and normal if's can be weird?
   "SIM103",  # sometimes "if not ...: return False; return True" are the streamlined form
   "SIM114",  # merging branches with `or` can be less readable
