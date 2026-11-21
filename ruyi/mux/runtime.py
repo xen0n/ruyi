@@ -2,7 +2,7 @@ import atexit
 import os
 import re
 import shlex
-from typing import Final, List, NoReturn
+from typing import Final, NoReturn
 
 from ..config import GlobalConfig
 from ..i18n import _
@@ -24,7 +24,7 @@ def _run_exit_handlers_and_execv(
 def mux_main(
     gm: ProvidesGlobalMode,
     gc: GlobalConfig,
-    argv: List[str],
+    argv: list[str],
 ) -> int | NoReturn:
     basename = os.path.basename(gm.argv0)
     logger = gc.logger
@@ -184,7 +184,7 @@ def is_proxying_to_clang(basename: str) -> bool:
 def mux_qemu_main(
     gc: GlobalConfig,
     vcfg: RuyiVenvConfig,
-    argv: List[str],
+    argv: list[str],
 ) -> int | NoReturn:
     logger = gc.logger
     binpath = vcfg.qemu_bin

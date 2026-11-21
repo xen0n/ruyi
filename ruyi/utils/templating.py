@@ -1,5 +1,5 @@
 import shlex
-from typing import Any, Final, Callable, Tuple
+from typing import Any, Final, Callable
 
 from jinja2 import BaseLoader, Environment, TemplateNotFound
 
@@ -12,7 +12,7 @@ class EmbeddedLoader(BaseLoader):
         self,
         environment: Environment,
         template: str,
-    ) -> Tuple[str, str | None, Callable[[], bool] | None]:
+    ) -> tuple[str, str | None, Callable[[], bool] | None]:
         from importlib import resources
 
         path = resources.files("ruyi.resources") / f"{template}.jinja"

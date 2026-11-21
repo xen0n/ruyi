@@ -1,12 +1,11 @@
 import abc
 import re
-from typing import Final, Iterator, Literal, Tuple
+from typing import Final, Iterator, Literal
 
 import semver
 
 from .pkg_manifest import BoundPackageManifest, is_prerelease
 from .protocols import ProvidesPackageManifests
-
 
 AtomKind = Literal["name", "expr", "slug"]
 
@@ -61,7 +60,7 @@ class Atom(abc.ABC):
         raise NotImplementedError
 
 
-def split_category(name: str) -> Tuple[str | None, str]:
+def split_category(name: str) -> tuple[str | None, str]:
     fragments = name.split("/", 1)
     if len(fragments) == 2:
         return (fragments[0], fragments[1])
