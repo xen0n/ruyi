@@ -202,7 +202,7 @@ class FSEntityProvider(BaseEntityProvider):
 
         try:
             schema_files = list(self._schemas_root.glob("*.jsonschema"))
-        except IOError as e:
+        except OSError as e:
             self._logger.W(
                 _("failed to access entity schemas directory {dir}: {reason}").format(
                     dir=self._schemas_root,
@@ -218,7 +218,7 @@ class FSEntityProvider(BaseEntityProvider):
             try:
                 with open(p, "r", encoding="utf-8") as f:
                     schema = json.load(f)
-            except (IOError, json.JSONDecodeError) as e:
+            except (OSError, json.JSONDecodeError) as e:
                 self._logger.D(
                     f"failed to load schema for entity type '{entity_type}': {e}"
                 )
@@ -257,7 +257,7 @@ class FSEntityProvider(BaseEntityProvider):
                 try:
                     with open(file_path, "rb") as f:
                         data = tomllib.load(f)
-                except (IOError, tomllib.TOMLDecodeError) as e:
+                except (OSError, tomllib.TOMLDecodeError) as e:
                     self._logger.W(
                         _("failed to load entity from {path}: {reason}").format(
                             path=file_path,
