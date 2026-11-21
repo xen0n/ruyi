@@ -178,6 +178,27 @@ extend-exclude = [
 ]
 
 [tool.ruff.lint]
+extend-select = [
+  # https://github.com/astral-sh/ruff/issues/27199
+  "E401",
+  "E402",
+  "E701",
+  "E702",
+  "E703",
+  "E711",
+  "E712",
+  "E713",
+  "E714",
+  "E721",
+  "E731",
+  "E741",
+  "E742",
+  "E743",
+  "F403",
+  "F405",
+  "F406",
+  "F722",
+]
 ignore = [
   "BLE001",  # catch-alls are needed sometimes
   "FURB166",  # explicit prefix check AND not doing int(base=0) are clearer
