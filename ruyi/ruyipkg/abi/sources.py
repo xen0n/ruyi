@@ -3,12 +3,13 @@
 import abc
 import functools
 import pathlib
-from typing import BinaryIO, Callable, Iterable, Iterator, cast, TYPE_CHECKING
+import tarfile
+from typing import BinaryIO, Callable, Iterable, Iterator, cast
+import zipfile
 
+from ...utils.ar import ArpyArchiveWrapper
+from ..unpack import open_decompressed, _wrap_decompressed
 from ..unpack_method import UnpackMethod, determine_unpack_method
-
-if TYPE_CHECKING:
-    import tarfile
 
 # ``(path, declared_size, read)``. The reader is a lazy view over the member
 # and must be called before requesting the next entry, while the source is
@@ -118,9 +119,6 @@ class _ArchiveSource(ABISource):
             raise ValueError(f"unsupported unpack method for ABI scan: {self._method}")
 
     def _iter_tar(self) -> Iterator[MemberEntry]:
-        import tarfile
-
-        from ..unpack import open_decompressed
 
         if self._method in (UnpackMethod.TAR_ZST, UnpackMethod.TAR_LZ4):
             # zstd/lz4 streams are not seekable, so parse the tar sequentially
@@ -149,8 +147,6 @@ class _ArchiveSource(ABISource):
             yield member.name, member.size, extracted.read
 
     def _iter_zip(self) -> Iterator[MemberEntry]:
-        import zipfile
-
         with zipfile.ZipFile(self._path) as zf:
             for info in zf.infolist():
                 if info.is_dir():
@@ -160,14 +156,7 @@ class _ArchiveSource(ABISource):
                 yield info.filename, info.file_size, functools.partial(zf.read, info)
 
     def _iter_deb(self) -> Iterator[MemberEntry]:
-        import tarfile
-
-        import arpy
-
-        from ..unpack import _wrap_decompressed
-
-        ar = arpy.Archive(str(self._path))
-        try:
+        with ArpyArchiveWrapper(str(self._path)) as ar:
             for entry in ar:
                 name = entry.header.name
                 if not name.startswith(b"data.tar"):
@@ -182,8 +171,6 @@ class _ArchiveSource(ABISource):
                     with tarfile.open(fileobj=fileobj, mode="r|") as tf:
                         yield from self._iter_tar_members(tf)
                 return
-        finally:
-            ar.close()
 
 
 class _PathsSource(ABISource):
