@@ -8,7 +8,7 @@ from typing import BinaryIO, Callable, Iterable, Iterator, cast
 import zipfile
 
 from ...utils.ar import ArpyArchiveWrapper
-from ..unpack import open_decompressed, _wrap_decompressed
+from ..unpack import open_decompressed
 from ..unpack_method import UnpackMethod, determine_unpack_method
 
 # ``(path, declared_size, read)``. The reader is a lazy view over the member
@@ -157,7 +157,7 @@ class _ArchiveSource(ABISource):
                     raise ValueError(
                         f"should never happen: {name!r} parsed as non-tar unpack method {method}"
                     )
-                with _wrap_decompressed(entry, method) as decompressed:
+                with open_decompressed(method, stream=entry) as decompressed:
                     fileobj = cast("BinaryIO", decompressed)
                     with tarfile.open(fileobj=fileobj, mode="r|") as tf:
                         yield from self._iter_tar_members(tf)
