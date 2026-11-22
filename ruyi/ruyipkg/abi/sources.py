@@ -17,18 +17,6 @@ from ..unpack_method import UnpackMethod, determine_unpack_method
 # without ever reading their contents.
 MemberEntry = tuple[str, "int | None", Callable[[], bytes]]
 
-_TAR_METHODS = frozenset(
-    {
-        UnpackMethod.TAR,
-        UnpackMethod.TAR_AUTO,
-        UnpackMethod.TAR_GZ,
-        UnpackMethod.TAR_BZ2,
-        UnpackMethod.TAR_LZ4,
-        UnpackMethod.TAR_XZ,
-        UnpackMethod.TAR_ZST,
-    }
-)
-
 
 def _path_reader(path: pathlib.Path) -> Callable[[], bytes]:
     return path.read_bytes
@@ -106,7 +94,7 @@ class _ArchiveSource(ABISource):
             yield normalized, size, reader
 
     def _iter_raw_members(self) -> Iterator[MemberEntry]:
-        if self._method in _TAR_METHODS:
+        if self._method.is_tar:
             yield from self._iter_tar()
         elif self._method == UnpackMethod.ZIP:
             yield from self._iter_zip()
@@ -119,7 +107,6 @@ class _ArchiveSource(ABISource):
             raise ValueError(f"unsupported unpack method for ABI scan: {self._method}")
 
     def _iter_tar(self) -> Iterator[MemberEntry]:
-
         if self._method in (UnpackMethod.TAR_ZST, UnpackMethod.TAR_LZ4):
             # zstd/lz4 streams are not seekable, so parse the tar sequentially
             # (``r|``) while keeping the decompressor open for the duration of
