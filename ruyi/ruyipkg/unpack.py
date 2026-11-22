@@ -223,62 +223,13 @@ def open_decompressed(
     if stream is None:
         if filename is None:
             raise ValueError("either filename or stream must be provided")
-        with _open_decompressed(filename, unpack_method) as s:
-            yield s
+        with open(filename, "rb") as f:
+            with _wrap_decompressed(f, unpack_method) as s:
+                yield s
         return
 
     with _wrap_decompressed(stream, unpack_method) as s:
         yield s
-
-
-@contextmanager
-def _open_decompressed(
-    filename: str,
-    unpack_method: UnpackMethod,
-) -> Generator[StreamReader, None, None]:
-    match unpack_method:
-        case UnpackMethod.TAR_GZ:
-            import gzip
-
-            gzipFile = gzip.GzipFile(filename, "rb")
-            try:
-                yield gzipFile
-            finally:
-                gzipFile.close()
-        case UnpackMethod.TAR_BZ2:
-            import bz2
-
-            bz2File = bz2.BZ2File(filename, "rb")
-            try:
-                yield bz2File
-            finally:
-                bz2File.close()
-        case UnpackMethod.TAR_XZ:
-            import lzma
-
-            lzmaFile = lzma.LZMAFile(filename, "rb")
-            try:
-                yield lzmaFile
-            finally:
-                lzmaFile.close()
-        case UnpackMethod.TAR_ZST:
-            import zstandard
-
-            zstFile = zstandard.ZstdDecompressor().stream_reader(open(filename, "rb"))
-            try:
-                yield zstFile
-            finally:
-                zstFile.close()  # type: ignore[no-untyped-call]  # this is weird
-        case UnpackMethod.TAR_LZ4:
-            import lz4.frame
-
-            lz4File = lz4.frame.LZ4FrameFile(filename, "rb")
-            try:
-                yield lz4File
-            finally:
-                lz4File.close()
-        case _:
-            raise UnrecognizedPackFormatError(filename=filename, fmt=unpack_method)
 
 
 @contextmanager
