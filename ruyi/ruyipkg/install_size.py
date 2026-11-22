@@ -4,7 +4,10 @@ import io
 import mmap
 import os
 from pathlib import Path
+import tarfile
+import zipfile
 
+from ..utils.ar import ArpyArchiveWrapper
 from .unpack import open_decompressed
 from .unpack_method import UnpackMethod
 
@@ -56,8 +59,6 @@ def compute_install_size(path: Path, unpack_method: UnpackMethod) -> int:
 
 
 def _install_size_tar(path: str) -> int:
-    import tarfile
-
     total = 0
     with tarfile.open(path, mode="r:*") as tf:
         for member in tf.getmembers():
@@ -67,8 +68,6 @@ def _install_size_tar(path: str) -> int:
 
 
 def _install_size_zip(path: str) -> int:
-    import zipfile
-
     total = 0
     with zipfile.ZipFile(path) as zf:
         for info in zf.infolist():
@@ -77,20 +76,16 @@ def _install_size_zip(path: str) -> int:
 
 
 def _install_size_deb(path: str) -> int:
-    import tarfile
-
-    import arpy
-
-    ar = arpy.Archive(path)
-    for entry in ar:
-        if entry.header.name.startswith(b"data.tar"):
-            data = entry.read()
-            total = 0
-            with tarfile.open(fileobj=io.BytesIO(data), mode="r:*") as tf:
-                for member in tf.getmembers():
-                    if member.isreg():
-                        total += member.size
-            return total
+    with ArpyArchiveWrapper(path) as ar:
+        for entry in ar:
+            if entry.header.name.startswith(b"data.tar"):
+                data = entry.read()
+                total = 0
+                with tarfile.open(fileobj=io.BytesIO(data), mode="r:*") as tf:
+                    for member in tf.getmembers():
+                        if member.isreg():
+                            total += member.size
+                return total
     raise RuntimeError(f"no data.tar found in deb package: {path}")
 
 
