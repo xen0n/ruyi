@@ -151,20 +151,26 @@ def _do_unpack_tar(
 
     argv = ["tar", "-x"]
 
+    # only leave file handling to tar for TAR and TAR_AUTO unpack methods, and
+    # handle decompression ourselves for other tar variants.
+    should_handle_stream = stream is not None or unpack_method not in (
+        UnpackMethod.TAR,
+        UnpackMethod.TAR_AUTO,
+    )
     wrapped_stream = None
-    if stream is not None:
-        wrapped_stream = _wrap_decompressed(stream, unpack_method)
-        filename = "-"
-    elif unpack_method not in (UnpackMethod.TAR, UnpackMethod.TAR_AUTO):
-        logger.D(f"decompressing {unpack_method} for tar: {filename}")
-        wrapped_stream = open_decompressed(unpack_method, filename=filename)
-        filename = "-"
+    filename_for_tar = filename
+    stdin_for_tar: int | None = None
+    if should_handle_stream:
+        logger.D(f"going to handle {unpack_method} stream for tar: {filename}")
+        wrapped_stream = open_decompressed(
+            unpack_method,
+            filename=filename,
+            stream=stream,
+        )
+        filename_for_tar = "-"
+        stdin_for_tar = subprocess.PIPE
 
-    stdin: int | None = None
-    if filename == "-":
-        stdin = subprocess.PIPE
-
-    argv.extend(("-f", filename, f"--strip-components={strip_components}"))
+    argv.extend(("-f", filename_for_tar, f"--strip-components={strip_components}"))
     if prefixes_to_unpack:
         if any(p.startswith("-") for p in prefixes_to_unpack):
             raise ValueError(
@@ -172,7 +178,7 @@ def _do_unpack_tar(
             )
         argv.extend(prefixes_to_unpack)
     logger.D(f"about to call tar: argv={argv}")
-    p = subprocess.Popen(argv, cwd=dest, stdin=stdin)
+    p = subprocess.Popen(argv, cwd=dest, stdin=stdin_for_tar)
 
     retcode: int
     if wrapped_stream is None:
