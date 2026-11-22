@@ -30,6 +30,10 @@ class UnpackMethod(enum.StrEnum):
     DEB = "deb"
 
     @property
+    def is_tar(self) -> bool:
+        return self.startswith("tar")
+
+    @property
     def underlying_stream_format(self) -> "UnpackMethod":
         S = type(self)
         match self:
