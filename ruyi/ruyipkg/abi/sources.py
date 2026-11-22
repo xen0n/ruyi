@@ -166,6 +166,10 @@ class _ArchiveSource(ABISource):
                 # decompression machinery and parse the result as a
                 # sequential tar stream; the ar entry is read lazily.
                 method = determine_unpack_method(name.decode("ascii", "replace"))
+                if not method.is_tar:
+                    raise ValueError(
+                        f"should never happen: {name!r} parsed as non-tar unpack method {method}"
+                    )
                 with _wrap_decompressed(entry, method) as decompressed:
                     fileobj = cast("BinaryIO", decompressed)
                     with tarfile.open(fileobj=fileobj, mode="r|") as tf:

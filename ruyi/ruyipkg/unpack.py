@@ -144,6 +144,11 @@ def _do_unpack_tar(
     stream: StreamReader | None = None,
     prefixes_to_unpack: list[str] | None = None,
 ) -> None:
+    if not unpack_method.is_tar:
+        raise ValueError(
+            f"unpack_method must be a tar variant for _do_unpack_tar, got {unpack_method}"
+        )
+
     argv = ["tar", "-x"]
 
     wrapped_stream = None
@@ -249,10 +254,10 @@ def _wrap_decompressed(
     stream: StreamReader,
     unpack_method: UnpackMethod,
 ) -> Generator[StreamReader, None, None]:
-    match unpack_method:
-        case UnpackMethod.TAR | UnpackMethod.TAR_AUTO:
+    match unpack_method.underlying_stream_format:
+        case UnpackMethod.RAW:
             yield stream
-        case UnpackMethod.TAR_GZ:
+        case UnpackMethod.GZ:
             import gzip
 
             gzipFile = gzip.GzipFile(fileobj=stream, mode="rb")
@@ -260,7 +265,7 @@ def _wrap_decompressed(
                 yield gzipFile
             finally:
                 gzipFile.close()
-        case UnpackMethod.TAR_BZ2:
+        case UnpackMethod.BZ2:
             import bz2
 
             bz2File = bz2.BZ2File(stream, "rb")
@@ -268,7 +273,7 @@ def _wrap_decompressed(
                 yield bz2File
             finally:
                 bz2File.close()
-        case UnpackMethod.TAR_XZ:
+        case UnpackMethod.XZ:
             import lzma
 
             lzmaFile = lzma.LZMAFile(stream, "rb")  # type: ignore[arg-type]  # in fact only read() is used
@@ -276,12 +281,12 @@ def _wrap_decompressed(
                 yield lzmaFile
             finally:
                 lzmaFile.close()
-        case UnpackMethod.TAR_ZST:
+        case UnpackMethod.ZST:
             import zstandard
 
             with zstandard.ZstdDecompressor().stream_reader(stream) as zstFile:  # type: ignore[arg-type]  # in fact only read() is used
                 yield zstFile
-        case UnpackMethod.TAR_LZ4:
+        case UnpackMethod.LZ4:
             import lz4.frame
 
             lz4File = lz4.frame.LZ4FrameFile(stream)
