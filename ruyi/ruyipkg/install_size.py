@@ -96,7 +96,7 @@ def _install_size_decompressed_stream(
     """Decompress a single-file compressed stream to measure its unpacked size."""
     size = 0
     bufsize = 4 * mmap.PAGESIZE
-    with open_decompressed(path, unpack_method) as f:
+    with open_decompressed(unpack_method, filename=path) as f:
         while True:
             chunk = f.read(bufsize)
             if not chunk:

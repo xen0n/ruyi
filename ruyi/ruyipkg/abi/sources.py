@@ -112,7 +112,7 @@ class _ArchiveSource(ABISource):
             # (``r|``) while keeping the decompressor open for the duration of
             # the iteration. Member contents are pulled lazily by the consumer,
             # so excluded or oversized members are never materialized.
-            with open_decompressed(str(self._path), self._method) as stream:
+            with open_decompressed(self._method, filename=str(self._path)) as stream:
                 fileobj = cast(BinaryIO, stream)
                 with tarfile.open(fileobj=fileobj, mode="r|") as tf:
                     yield from self._iter_tar_members(tf)

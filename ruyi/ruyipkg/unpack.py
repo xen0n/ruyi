@@ -157,7 +157,7 @@ def _do_unpack_tar(
         filename = "-"
     elif unpack_method not in (UnpackMethod.TAR, UnpackMethod.TAR_AUTO):
         logger.D(f"decompressing {unpack_method} for tar: {filename}")
-        wrapped_stream = open_decompressed(filename, unpack_method)
+        wrapped_stream = open_decompressed(unpack_method, filename=filename)
         filename = "-"
 
     stdin: int | None = None
@@ -201,6 +201,38 @@ def _do_unpack_tar(
 
 @contextmanager
 def open_decompressed(
+    unpack_method: UnpackMethod,
+    *,
+    filename: str | None = None,
+    stream: StreamReader | None = None,
+) -> Generator[StreamReader, None, None]:
+    """Open a decompressed stream for the given unpack method.
+
+    At least one of ``filename`` or ``stream`` must be provided.
+    If both are provided, ``stream`` takes precedence.
+
+    Args:
+        unpack_method: The method used to decompress the stream.
+        filename: The name of the file to open, if any.
+        stream: The stream to wrap, if any. Takes precedence over ``filename`` if both are provided.
+
+    Yields:
+        A decompressed stream reader.
+    """
+
+    if stream is None:
+        if filename is None:
+            raise ValueError("either filename or stream must be provided")
+        with _open_decompressed(filename, unpack_method) as s:
+            yield s
+        return
+
+    with _wrap_decompressed(stream, unpack_method) as s:
+        yield s
+
+
+@contextmanager
+def _open_decompressed(
     filename: str,
     unpack_method: UnpackMethod,
 ) -> Generator[StreamReader, None, None]:
