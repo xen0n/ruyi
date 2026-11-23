@@ -61,21 +61,15 @@ def do_unpack(
             return _do_unpack_zip(logger, filename, dest)
         case UnpackMethod.DEB:
             return _do_unpack_deb(logger, filename, dest)
-        case UnpackMethod.GZ:
-            # bare gzip file
-            return _do_unpack_bare_gz(logger, filename, dest)
-        case UnpackMethod.BZ2:
-            # bare bzip2 file
-            return _do_unpack_bare_bzip2(logger, filename, dest)
-        case UnpackMethod.LZ4:
-            # bare lz4 file
-            return _do_unpack_bare_lz4(logger, filename, dest)
-        case UnpackMethod.XZ:
-            # bare xz file
-            return _do_unpack_bare_xz(logger, filename, dest)
-        case UnpackMethod.ZST:
-            # bare zstd file
-            return _do_unpack_bare_zstd(logger, filename, dest)
+        case (
+            UnpackMethod.GZ
+            | UnpackMethod.BZ2
+            | UnpackMethod.LZ4
+            | UnpackMethod.XZ
+            | UnpackMethod.ZST
+        ):
+            # bare compressed file
+            return _do_unpack_bare_file(logger, dest, unpack_method, filename)
         case _:
             raise UnrecognizedPackFormatError(filename=filename)
 
@@ -306,90 +300,30 @@ def _do_unpack_zip(
         )
 
 
-def _do_unpack_bare_gz(
+def _do_unpack_bare_file(
     logger: RuyiLogger,
-    filename: str,
     destdir: str | os.PathLike[Any] | None,
+    unpack_method: UnpackMethod,
+    filename: str,
 ) -> None:
     dest_filename = os.path.splitext(os.path.basename(filename))[0]
 
     if destdir is not None:
         os.chdir(destdir)
 
-    import gzip
+    bufsize = 0  # means "use default" for shutil.copyfileobj
+    if unpack_method == UnpackMethod.ZST:
+        import zstandard
 
-    logger.D(f"decompressing gzip: {filename}")
-    with gzip.open(filename, "rb") as src, open(dest_filename, "wb") as out:
-        shutil.copyfileobj(src, out)
+        # replicate ZstdDecompressor.copy_stream()'s choice of buffer size
+        bufsize = zstandard.DECOMPRESSION_RECOMMENDED_OUTPUT_SIZE
 
-
-def _do_unpack_bare_bzip2(
-    logger: RuyiLogger,
-    filename: str,
-    destdir: str | os.PathLike[Any] | None,
-) -> None:
-    dest_filename = os.path.splitext(os.path.basename(filename))[0]
-
-    if destdir is not None:
-        os.chdir(destdir)
-
-    import bz2
-
-    logger.D(f"decompressing bzip2: {filename}")
-    with bz2.open(filename, "rb") as src, open(dest_filename, "wb") as out:
-        shutil.copyfileobj(src, out)
-
-
-def _do_unpack_bare_lz4(
-    logger: RuyiLogger,
-    filename: str,
-    destdir: str | os.PathLike[Any] | None,
-) -> None:
-    dest_filename = os.path.splitext(os.path.basename(filename))[0]
-
-    if destdir is not None:
-        os.chdir(destdir)
-
-    import lz4.frame
-
-    logger.D(f"decompressing lz4: {filename}")
-    with lz4.frame.open(filename, "rb") as src, open(dest_filename, "wb") as out:
-        shutil.copyfileobj(src, out)
-
-
-def _do_unpack_bare_xz(
-    logger: RuyiLogger,
-    filename: str,
-    destdir: str | os.PathLike[Any] | None,
-) -> None:
-    dest_filename = os.path.splitext(os.path.basename(filename))[0]
-
-    if destdir is not None:
-        os.chdir(destdir)
-
-    import lzma
-
-    logger.D(f"decompressing xz: {filename}")
-    with lzma.open(filename, "rb") as src, open(dest_filename, "wb") as out:
-        shutil.copyfileobj(src, out)
-
-
-def _do_unpack_bare_zstd(
-    logger: RuyiLogger,
-    filename: str,
-    destdir: str | os.PathLike[Any] | None,
-) -> None:
-    dest_filename = os.path.splitext(os.path.basename(filename))[0]
-
-    if destdir is not None:
-        os.chdir(destdir)
-
-    import zstandard
-
-    logger.D(f"decompressing zstd: {filename}")
-    dctx = zstandard.ZstdDecompressor()
-    with open(filename, "rb") as src, open(dest_filename, "wb") as out:
-        dctx.copy_stream(src, out)
+    logger.D(f"decompressing {unpack_method}: {filename}")
+    with (
+        open_decompressed(unpack_method, filename=filename) as src,
+        open(dest_filename, "wb") as out,
+    ):
+        shutil.copyfileobj(src, out, length=bufsize)
 
 
 def _do_unpack_deb(
