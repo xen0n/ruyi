@@ -1,5 +1,5 @@
 import argparse
-from typing import Callable, IO, Protocol, TYPE_CHECKING
+from typing import Callable, ClassVar, IO, Protocol, TYPE_CHECKING
 
 from ..i18n import _
 from . import RUYI_ENTRYPOINT_NAME
@@ -24,7 +24,7 @@ def _wrap_help(x: _PrintHelp) -> "CLIEntrypoint":
 
 
 class BaseCommand:
-    parsers: "list[type[BaseCommand]]" = []
+    parsers: ClassVar[list[type["BaseCommand"]]] = []
 
     cmd: str | None
     _tele_key: str | None
