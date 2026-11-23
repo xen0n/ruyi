@@ -70,6 +70,7 @@ def test_unknown_machine_keeps_raw_no_parsed() -> None:
     rec, errors = scan_elf_stream(
         io.BytesIO(data), paths=("bin/y",), sha256="00", max_raw_attr_bytes=4096
     )
+    assert len(errors) == 0
     assert rec is not None
     assert rec.e_machine == 0x9999
     assert rec.parsed_attrs == {}
@@ -155,6 +156,7 @@ def test_scans_real_system_binary() -> None:
         rec, errors = scan_elf_stream(
             f, paths=(path,), sha256="00", max_raw_attr_bytes=4096
         )
+    assert len(errors) == 0
     assert rec is not None
     # A dynamically-linked system shell needs at least libc and has an interp.
     if rec.is_dynamic:
