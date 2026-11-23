@@ -1,6 +1,6 @@
 import functools
 import re
-from typing import Any, Final, TypedDict
+from typing import Final, TypedDict
 
 from ..config.news import NewsReadStatusStore
 from ..utils import frontmatter
@@ -16,12 +16,12 @@ class NewsItemNameMetadata:
         self.id = id
         self.lang = lang
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, NewsItemNameMetadata):
             return NotImplemented
         return self.id == other.id
 
-    def __lt__(self, other: Any) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, NewsItemNameMetadata):
             return NotImplemented
 
@@ -114,12 +114,12 @@ class NewsItem:
         self.ordinal = 0
         self.is_read = False
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, NewsItem):
             return NotImplemented
         return self._id == other._id and self.ordinal == other.ordinal
 
-    def __lt__(self, other: Any) -> bool:
+    def __lt__(self, other: object) -> bool:
         if not isinstance(other, NewsItem):
             return NotImplemented
         return self._id < other._id or self.ordinal < other.ordinal
