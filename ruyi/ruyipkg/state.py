@@ -5,11 +5,9 @@ import pathlib
 from typing import Any, Iterable, Iterator, TypedDict, TYPE_CHECKING
 from dataclasses import dataclass
 
-from .pkg_manifest import BoundPackageManifest
-from .protocols import ProvidesPackageManifests
-
 if TYPE_CHECKING:
     # for avoiding heavy import
+    from .pkg_manifest import BoundPackageManifest
     from .protocols import ProvidesPackageManifests
 
 
@@ -261,9 +259,11 @@ class RuyipkgGlobalStateStore:
         return list(installs.values())
 
 
-class BoundInstallationStateStore(ProvidesPackageManifests):
+class BoundInstallationStateStore:
     def __init__(
-        self, rgs: RuyipkgGlobalStateStore, mr: "ProvidesPackageManifests"
+        self,
+        rgs: RuyipkgGlobalStateStore,
+        mr: "ProvidesPackageManifests",
     ) -> None:
         self._rgs = rgs
         self._mr = mr
@@ -271,12 +271,12 @@ class BoundInstallationStateStore(ProvidesPackageManifests):
     def _get_installed_manifest(
         self,
         info: PackageInstallationInfo,
-    ) -> BoundPackageManifest | None:
+    ) -> "BoundPackageManifest | None":
         """Get the bound manifest for an installed package, or None if not found in repo."""
 
         return self._mr.get_pkg(info.name, info.category, info.version)
 
-    def iter_pkg_manifests(self) -> Iterable[BoundPackageManifest]:
+    def iter_pkg_manifests(self) -> "Iterable[BoundPackageManifest]":
         """Iterate over all installed package manifests."""
 
         installed_pkgs = self._rgs.list_installed_packages()
@@ -286,7 +286,7 @@ class BoundInstallationStateStore(ProvidesPackageManifests):
 
     def iter_pkgs(
         self,
-    ) -> Iterable[tuple[str, str, dict[str, BoundPackageManifest]]]:
+    ) -> "Iterable[tuple[str, str, dict[str, BoundPackageManifest]]]":
         """Iterate over installed packages grouped by category and name."""
 
         installed_pkgs = self._rgs.list_installed_packages()
@@ -309,7 +309,7 @@ class BoundInstallationStateStore(ProvidesPackageManifests):
         self,
         name: str,
         category: str | None = None,
-    ) -> Iterable[BoundPackageManifest]:
+    ) -> "Iterable[BoundPackageManifest]":
         """Iterate over installed versions of a specific package."""
 
         installed_pkgs = self._rgs.list_installed_packages()
@@ -323,7 +323,7 @@ class BoundInstallationStateStore(ProvidesPackageManifests):
         name: str,
         category: str,
         ver: str,
-    ) -> BoundPackageManifest | None:
+    ) -> "BoundPackageManifest | None":
         """Returns the package manifest by exact match, or None if not found."""
         installed_pkgs = self._rgs.list_installed_packages()
         for info in installed_pkgs:
@@ -340,7 +340,7 @@ class BoundInstallationStateStore(ProvidesPackageManifests):
         name: str,
         category: str | None = None,
         include_prerelease_vers: bool = False,
-    ) -> BoundPackageManifest:
+    ) -> "BoundPackageManifest":
         """Get the latest installed version of a package."""
 
         from .pkg_manifest import is_prerelease
@@ -363,7 +363,7 @@ class BoundInstallationStateStore(ProvidesPackageManifests):
         return latest
 
     # To be removed later along with slug support
-    def get_pkg_by_slug(self, slug: str) -> BoundPackageManifest | None:
+    def get_pkg_by_slug(self, slug: str) -> "BoundPackageManifest | None":
         """Get an installed package by its slug."""
 
         installed_pkgs = self._rgs.list_installed_packages()
@@ -378,7 +378,7 @@ class BoundInstallationStateStore(ProvidesPackageManifests):
     def iter_upgradable_pkgs(
         self,
         include_prereleases: bool = False,
-    ) -> Iterator[tuple[BoundPackageManifest, str, bool]]:
+    ) -> "Iterator[tuple[BoundPackageManifest, str, bool]]":
         """Iterate over installed packages that have newer versions available.
 
         Yields ``(installed_pm, new_version_str, repo_migrated)`` tuples.
