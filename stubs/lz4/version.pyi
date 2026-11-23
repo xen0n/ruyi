@@ -1,3 +1,5 @@
+from typing import TypeAlias
+
 __all__ = [
     "__commit_id__",
     "__version__",
@@ -7,11 +9,11 @@ __all__ = [
     "version_tuple",
 ]
 
-VERSION_TUPLE = tuple[int | str, ...]
-COMMIT_ID = str | None
+_VersionTuple: TypeAlias = tuple[int | str, ...]
+_CommitId: TypeAlias = str | None
 version: str
 __version__: str
-__version_tuple__: VERSION_TUPLE
-version_tuple: VERSION_TUPLE
-commit_id: COMMIT_ID
-__commit_id__: COMMIT_ID
+__version_tuple__: _VersionTuple
+version_tuple: _VersionTuple
+commit_id: _CommitId
+__commit_id__: _CommitId
