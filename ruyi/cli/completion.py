@@ -5,13 +5,13 @@ see https://github.com/kislyuk/argcomplete/issues/443 for why this is needed
 """
 
 import argparse
-from typing import Any, Callable, Final, Optional, Sequence, cast
+from typing import Any, Callable, Final, Sequence, cast
 
 SUPPORTED_SHELLS: Final[set[str]] = {"bash", "zsh"}
 
 
 class ArgcompleteAction(argparse.Action):
-    completer: Optional[Callable[[str, object], list[str]]]
+    completer: Callable[[str, object], list[str]] | None
 
     def __call__(
         self,
