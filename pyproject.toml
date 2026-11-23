@@ -135,6 +135,24 @@ unsafe_packages = [
 ]
 
 
+[tool.pylint.main]
+fail-under = 10
+ignore-paths = ["tests/ruyi-pytest", "tmp", ".venv"]
+jobs = 0
+py-version = "3.11"
+
+[tool.pylint."messages control"]
+disable = [
+  "import-outside-toplevel",  # necessary for CLI init critical path reduction
+  "wrong-import-position",  # can be interspersed with TYPE_CHECKING-only blocks etc.
+
+  # Don't write docstrings for the sake of docstrings
+  "missing-class-docstring",
+  "missing-function-docstring",
+  "missing-module-docstring",
+]
+
+
 [tool.pyright]
 include = ["ruyi", "scripts", "tests"]
 exclude = ["**/__pycache__", "tests/ruyi-pytest", "tmp"]
