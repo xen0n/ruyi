@@ -93,7 +93,11 @@ _MUSL_VERSION_RE: Final = re.compile(rb"(?m)^Version ([0-9.]+)$")
 
 
 def _try_get_musl_ver(ldso_path: str) -> str | None:
-    res = subprocess.run([ldso_path], stderr=subprocess.PIPE)
+    res = subprocess.run(
+        [ldso_path],
+        check=False,
+        stderr=subprocess.PIPE,
+    )
     if m := _MUSL_VERSION_RE.search(res.stderr):
         return m.group(1).decode("ascii", "ignore")
     return None

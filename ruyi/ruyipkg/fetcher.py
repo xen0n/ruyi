@@ -364,7 +364,12 @@ class CurlFetcher(BaseFetcher):
             )
         )
 
-        proc = subprocess.run(argv, stdout=subprocess.PIPE, text=True)
+        proc = subprocess.run(
+            argv,
+            check=False,
+            stdout=subprocess.PIPE,
+            text=True,
+        )
         code = _parse_http_code(proc.stdout)
 
         if proc.returncode != 0:
