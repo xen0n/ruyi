@@ -64,7 +64,7 @@ class ArpyArchiveWrapper(arpy.Archive, AbstractContextManager["arpy.Archive"]):
         if isinstance(name, bytes):
             ar_file = self.archived_files.get(name)
             if ar_file is None:
-                raise KeyError("There is no item named %r in the archive" % (name,))
+                raise KeyError(f"There is no item named {name!r} in the archive")
 
             return ar_file
 
