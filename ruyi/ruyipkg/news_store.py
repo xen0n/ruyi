@@ -53,7 +53,7 @@ class NewsItemStore:
     def add(self, filename: str, contents: str) -> None:
         md = parse_news_filename(filename)
         if md is None:
-            return None
+            return
 
         post = frontmatter.loads(contents)
 

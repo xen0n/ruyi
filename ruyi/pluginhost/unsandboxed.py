@@ -227,7 +227,7 @@ class UnsandboxedRuyiPluginLoader(BasePluginLoader[UnsandboxedModuleDict]):
             for dst_name, src_name in renamed_values_to_bind.items():
                 _assert_name_is_public(src_name)
                 g[dst_name] = mod[src_name]
-            return None
+            return
 
         code = self.source_to_code(program, resolved_path)
         mod_globals: dict[str, object] = {
