@@ -1,27 +1,51 @@
+from typing import Mapping
+
 from ruyi.ruyipkg.abi.aggregate import build_summary
-from ruyi.ruyipkg.abi.model import ElfABIRecord, ElfType, VersionNeed
+from ruyi.ruyipkg.abi.model import (
+    AttributeVendorBlob,
+    ElfABIRecord,
+    ElfType,
+    GnuProperty,
+    VersionNeed,
+)
 
 
-def _rec(**kw: object) -> ElfABIRecord:
-    base: dict[str, object] = dict(
-        paths=("x",),
-        sha256="0",
-        e_machine=62,
-        elf_class=64,
-        endianness="little",
-        elf_type=ElfType.DYN,
-        is_dynamic=True,
-        interpreter=None,
-        soname=None,
-        needed=(),
-        version_needs=(),
-        version_defs=(),
-        gnu_properties=(),
-        elf_attributes=(),
-        parsed_attrs={},
+def _rec(
+    paths: tuple[str, ...] = ("x",),
+    sha256: str = "0",
+    e_machine: int = 62,
+    elf_class: int = 64,
+    endianness: str = "little",
+    elf_type: ElfType = ElfType.DYN,
+    is_dynamic: bool = True,
+    interpreter: str | None = None,
+    soname: str | None = None,
+    needed: tuple[str, ...] = (),
+    version_needs: tuple[VersionNeed, ...] = (),
+    version_defs: tuple[str, ...] = (),
+    gnu_properties: tuple[GnuProperty, ...] = (),
+    elf_attributes: tuple[AttributeVendorBlob, ...] = (),
+    parsed_attrs: Mapping[str, str | int | bool] | None = None,
+    **kw: object,
+) -> ElfABIRecord:
+    return ElfABIRecord(
+        paths=paths,
+        sha256=sha256,
+        e_machine=e_machine,
+        elf_class=elf_class,
+        endianness=endianness,
+        elf_type=elf_type,
+        is_dynamic=is_dynamic,
+        interpreter=interpreter,
+        soname=soname,
+        needed=needed,
+        version_needs=version_needs,
+        version_defs=version_defs,
+        gnu_properties=gnu_properties,
+        elf_attributes=elf_attributes,
+        parsed_attrs=parsed_attrs or {},
+        **kw,
     )
-    base.update(kw)
-    return ElfABIRecord(**base)  # type: ignore[arg-type]
 
 
 def test_needed_union_sorted() -> None:
