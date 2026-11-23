@@ -1,10 +1,10 @@
 __all__ = [
-    "version",
+    "__commit_id__",
     "__version__",
     "__version_tuple__",
-    "version_tuple",
     "commit_id",
-    "__commit_id__",
+    "version",
+    "version_tuple",
 ]
 
 VERSION_TUPLE = tuple[int | str, ...]

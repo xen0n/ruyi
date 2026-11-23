@@ -9,12 +9,12 @@ from .version import VERSION as VERSION
 
 __all__ = [
     "VERSION",
+    "JsonSchemaDefinitionException",
     "JsonSchemaException",
     "JsonSchemaValueException",
-    "JsonSchemaDefinitionException",
-    "validate",
     "compile",
     "compile_to_code",
+    "validate",
 ]
 
 def validate(

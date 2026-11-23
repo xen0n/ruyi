@@ -18,14 +18,14 @@ from .serialize import dump_abi_report_toml, load_abi_report_toml
 from .sources import ABISource
 
 __all__ = [
-    "ABIReport",
-    "ABIScanError",
-    "ABISummary",
-    "ABISource",
-    "AttributeVendorBlob",
     "DEFAULT_MAX_MEMBER_BYTES",
     "DEFAULT_MAX_RAW_ATTR_BYTES",
     "DEFAULT_MAX_SIDECAR_BYTES",
+    "ABIReport",
+    "ABIScanError",
+    "ABISource",
+    "ABISummary",
+    "AttributeVendorBlob",
     "ElfABIRecord",
     "ElfType",
     "GnuProperty",
