@@ -123,7 +123,7 @@ class EntityListCommand(
 
         # Human-readable output
         for e in entity_store.iter_entities(entity_types):
-            logger.stdout(f"'{str(e)}':")
+            logger.stdout(f"'{e!s}':")
             logger.stdout(f"  display name: {e.display_name}")
             logger.stdout(f"  data: {e.data}")
             logger.stdout(f"  forward_refs: {e.related_refs}")
