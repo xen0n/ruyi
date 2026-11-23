@@ -80,7 +80,6 @@ class BaseCommand:
     @classmethod
     def configure_args(cls, gc: "GlobalConfig", p: "ArgumentParser") -> None:
         """Configure arguments for this parser."""
-        pass
 
     @classmethod
     def main(cls, cfg: "GlobalConfig", args: argparse.Namespace) -> int:

@@ -22,8 +22,6 @@ class PorcelainEntityListOutputV1(PorcelainEntity):
 class EntityError(Exception):
     """Base exception for entity-related errors."""
 
-    pass
-
 
 class EntityValidationError(EntityError):
     """Exception raised when an entity fails validation."""
