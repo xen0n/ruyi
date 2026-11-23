@@ -15,7 +15,7 @@ else:
         from argcomplete.completers import BaseCompleter
     except ImportError:
         # Fallback for environments where argcomplete is less than 2.0.0
-        class BaseCompleter(object):
+        class BaseCompleter:
             def __call__(
                 self,
                 *,
